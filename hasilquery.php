@@ -1,0 +1,53 @@
+<?php
+include ('header.php');
+?>
+
+
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <h1>Sistem Pengolah File Perundang-Undangan</h1><br>
+                <?php
+				$servername='sql104.epizy.com';
+				$username='epiz_21941247';
+				$password='mitaisti13';
+				$dbname='epiz_21941247_dbstbi';
+				$katakunci="";
+				// Create connection
+				$conn = new mysqli($servername, $username, $password, $dbname);
+				// Check connection
+				if ($conn->connect_error) {
+					die("Connection failed: " . $conn->connect_error);
+				} 
+				$hasil=$_POST['katakunci'];
+				$sql = "SELECT distinct nama_file,token,tokenstem FROM `dokumen` where token like '%$hasil%'";
+				//$sql = "SELECT distinct nama_file,token,tokenstem FROM `dokumen` WHERE MATCH (token,tokenstem) AGAINST ('$hasil' IN BOOLEAN MODE)";
+
+
+				echo $sql;
+				$result = $conn->query($sql);
+				if ($result->num_rows > 0) {
+					// output data of each row
+					while($row = $result->fetch_assoc()) {
+						echo "Nama file: " . $row["nama_file"]. " - Token: " . $row["token"]. " " . $row["tokenstem"]. "<br>";
+					}
+				} else {
+					echo "0 results";
+				}
+				$conn->close();
+
+				///
+
+				?>
+				
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+ 
+
+<?php
+include ('footer.php');
+?>
